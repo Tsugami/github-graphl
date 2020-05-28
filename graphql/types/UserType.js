@@ -4,8 +4,9 @@ const {
   GraphQLString,
   GraphQLList,
 } = require('graphql');
-const Github = require('../../github');
-const FollowType = require('./FollowType');
+const { request, bodyHandler } = require('../../request');
+const SimpleUserConnectionType = require('./SimpleUserConnectionType');
+const PaginationFields = require('../inputs/PaginationFields');
 
 const UserType = new GraphQLObjectType({
   name: 'User',
@@ -23,9 +24,21 @@ const UserType = new GraphQLObjectType({
       type: GraphQLString,
       resolve: (user) => user.name,
     },
+    company: {
+      type: GraphQLString,
+      resolve: (user) => user.company,
+    },
+    bio: {
+      type: GraphQLString,
+      resolve: (user) => user.bio,
+    },
     url: {
       type: GraphQLString,
-      resolve: (user) => user.url,
+      resolve: (user) => user.html_url,
+    },
+    location: {
+      type: GraphQLString,
+      resolve: (user) => user.location,
     },
     avatarUrl: {
       type: GraphQLString,
@@ -34,14 +47,6 @@ const UserType = new GraphQLObjectType({
     email: {
       type: GraphQLString,
       resolve: (user) => user.email,
-    },
-    followers: {
-      type: GraphQLList(FollowType),
-      resolve: (user) => Github.getUser(user.login).listFollowers().then(r => r.data),
-    },
-    following: {
-      type: GraphQLList(FollowType),
-      resolve: (user) => Github.getUser(user.login).listFollowing().then(r => r.data),
     },
     followersCount: {
       type: GraphQLInt,
@@ -66,6 +71,22 @@ const UserType = new GraphQLObjectType({
     updatedAt: {
       type: GraphQLString,
       resolve: (user) => user.updated_at,
+    },
+    followers: {
+      type: GraphQLList(SimpleUserConnectionType),
+      args: PaginationFields,
+      resolve: (user, { page, perPage }) => 
+        request(`${user.followers_url}?page=${page}&per_page=${perPage}`)
+          .then(bodyHandler)
+          .then(users => ({ users, pageInfo: { page, perPage} })),
+    },
+    following: {
+      type: GraphQLList(SimpleUserConnectionType),
+      args: PaginationFields,
+      resolve: (user, { page, perPage }) =>
+        request(`${user.following_url}?page=${page}&per_page=${perPage}`)
+          .then(bodyHandler)
+          .then(users => ({ users, pageInfo: { page, perPage} })),
     },
   }),
 });

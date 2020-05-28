@@ -3,13 +3,15 @@ const {
   GraphQLObjectType,
 } = require('graphql');
 
-const getUser = require('./queries/getUser');
+const User = require('./queries/User');
+const Users = require('./queries/Users');
 
 const RootQuery = new GraphQLObjectType({
   name: 'Query',
   description: 'This is the root query which holds all possible READ entrypoints for the GraphQL API',
   fields: () => ({
-    getUser,
+    User,
+    Users,
   }),
 });
 

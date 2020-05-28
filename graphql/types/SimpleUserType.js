@@ -3,10 +3,10 @@ const {
   GraphQLInt,
   GraphQLString,
 } = require('graphql');
-const Github = require('../../github');
-const UserType = require('./UserType');
+// const Github = require('../../request');
+// const UserType = require('./UserType');
 
-const FollowType = new GraphQLObjectType({
+const SimpleUserType = new GraphQLObjectType({
   name: 'Follow',
   description: 'This represents a Github Follow',
   fields: () => ({
@@ -33,4 +33,4 @@ const FollowType = new GraphQLObjectType({
   }),
 });
 
-module.exports = FollowType;
+module.exports = SimpleUserType;

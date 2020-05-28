@@ -1,10 +1,7 @@
-const {
-  GraphQLString, GraphQLList
-} = require('graphql');
-
-const SimpleUserConnectionType = require('../types/SimpleUserConnectionType');
+const { GraphQLString } = require('graphql');
+const SimpleUserConnectionType = require('../types/connections/SimpleUserConnection');
 const { github, bodyHandler } = require('../../request');
-const PaginationFields = require('../inputs/PaginationFields');
+const PaginationFields = require('../util/PaginationFields');
 
 const Users = {
   type: SimpleUserConnectionType,

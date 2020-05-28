@@ -4,9 +4,9 @@ const {
   GraphQLString,
   GraphQLList,
 } = require('graphql');
-const { request, bodyHandler } = require('../../request');
-const SimpleUserConnectionType = require('./SimpleUserConnectionType');
-const PaginationFields = require('../inputs/PaginationFields');
+// const { request, bodyHandler } = require('../../request');
+// const PaginationFields = require('../util/PaginationFields');
+// const SimpleUserType = require("./SimpleUserType");
 
 const UserType = new GraphQLObjectType({
   name: 'User',
@@ -72,22 +72,20 @@ const UserType = new GraphQLObjectType({
       type: GraphQLString,
       resolve: (user) => user.updated_at,
     },
-    followers: {
-      type: GraphQLList(SimpleUserConnectionType),
-      args: PaginationFields,
-      resolve: (user, { page, perPage }) => 
-        request(`${user.followers_url}?page=${page}&per_page=${perPage}`)
-          .then(bodyHandler)
-          .then(users => ({ users, pageInfo: { page, perPage} })),
-    },
-    following: {
-      type: GraphQLList(SimpleUserConnectionType),
-      args: PaginationFields,
-      resolve: (user, { page, perPage }) =>
-        request(`${user.following_url}?page=${page}&per_page=${perPage}`)
-          .then(bodyHandler)
-          .then(users => ({ users, pageInfo: { page, perPage} })),
-    },
+    // followers: {
+    //   type: GraphQLList(SimpleUserType),
+    //   args: PaginationFields,
+    //   resolve: (user, { page, perPage }) =>
+    //     request(`${user.followers_url}?page=${page}&per_page=${perPage}`)
+    //       .then(bodyHandler),
+    // },
+    // following: {
+    //   type: GraphQLList(SimpleUserType),
+    //   args: PaginationFields,
+    //   resolve: (user, { page, perPage }) =>
+    //     request(`${user.following_url}?page=${page}&per_page=${perPage}`)
+    //       .then(bodyHandler),
+    // },
   }),
 });
 

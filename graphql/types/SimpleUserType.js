@@ -3,12 +3,11 @@ const {
   GraphQLInt,
   GraphQLString,
 } = require('graphql');
-// const Github = require('../../request');
-// const UserType = require('./UserType');
+const { request, bodyHandler } = require('../../request');
+const UserType = require('./UserType');
 
 const SimpleUserType = new GraphQLObjectType({
-  name: 'Follow',
-  description: 'This represents a Github Follow',
+  name: 'SimpleUser',
   fields: () => ({
     id: {
       type: GraphQLInt,
@@ -20,16 +19,16 @@ const SimpleUserType = new GraphQLObjectType({
     },
     url: {
       type: GraphQLString,
-      resolve: (user) => user.url,
+      resolve: (user) => user.html_url,
     },
     avatarUrl: {
       type: GraphQLString,
       resolve: (user) => user.avatar_url,
     },
-    // user: {
-    //   type: UserType,
-    //   resolve: (user) => Github.getUser(user.login).getProfile().then(user => user.data),
-    // }
+    user: {
+      type: UserType,
+      resolve: (user) => request(user.url).then(bodyHandler),
+    }
   }),
 });
 

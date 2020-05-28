@@ -14,7 +14,7 @@ const SimpleUserConnectionType = new GraphQLObjectType({
       type: PaginationType,
       resolve: (data) => data.pageInfo,
     },
-    users: {
+    nodes: {
       type: GraphQLList(SimpleUserType),
       resolve: (data) => data.users,
     },

@@ -15,13 +15,13 @@ const Users = {
     },
     ...PaginationFields
   },
-  resolve: async (data, { since, page, perPage }) => {
-    const users = await github(`/users?since=${since}&page=${page}&per_page=${perPage}`).then(bodyHandler);
-    return {
-      users,
-      pageInfo: { page, perPage }
-    }
-  }
+  resolve: (data, { since, page, perPage }) =>
+    github(`/users?since=${since}&page=${page}&per_page=${perPage}`)
+      .then(bodyHandler)
+      .then(users => ({
+        users,
+        pageInfo: { page, perPage }
+      }))
 };
 
 module.exports = Users;
